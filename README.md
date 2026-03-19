@@ -1,145 +1,169 @@
-# PDF Accessibility Checker
+# PDF Accessibility Checker (Enhanced Version)
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/6b90593f124e4b8a94e63cd32a61b93b)](https://app.codacy.com/gh/R0mb0/PDF_text_accessibility_tester/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
-[![pages-build-deployment](https://github.com/R0mb0/PDF_text_accessibility_tester/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/R0mb0/PDF_text_accessibility_tester/actions/workflows/pages/pages-build-deployment)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/R0mb0/PDF_text_accessibility_tester)
-[![Open Source Love svg3](https://badges.frapsoft.com/os/v3/open-source.svg?v=103)](https://github.com/R0mb0/PDF_text_accessibility_tester)
-[![MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/license/mit)
-[![Donate](https://img.shields.io/badge/PayPal-Donate%20to%20Author-blue.svg)](http://paypal.me/R0mb0)
+A modern, client-side web tool for analyzing PDF accessibility in batch — designed to not only detect accessibility status, but also **identify and explain specific accessibility issues** found within each document.
 
-A modern, client-side web tool for checking the accessibility of PDF documents in batch. Upload one or more PDF files and instantly see if their text is selectable and readable — all directly in your browser, with no server upload required. Results are shown with document previews, clear status indicators, and easy navigation.
-
-<div align="center">
-
-## [👉 Click here to test the page! 👈](https://r0mb0.github.io/PDF_text_accessibility_tester/Index.html)
-
-[![example 1](https://github.com/R0mb0/PDF_text_accessibility_tester/blob/main/ReadMe_Imgs/example1.png)](https://r0mb0.github.io/PDF_text_accessibility_tester/Index.html)
-
-[![example 2](https://github.com/R0mb0/PDF_text_accessibility_tester/blob/main/ReadMe_Imgs/example2.png)](https://r0mb0.github.io/PDF_text_accessibility_tester/Index.html)
-
-</div>
+This tool is optimized for institutional workflows (e.g., Sunapsis EForms, compliance audits, and document reviews) and provides clear, actionable insights.
 
 ---
 
 ## 🚀 Features
 
-- **Batch upload PDF files:** Select one or more PDFs from your computer. Only `.pdf`, `.pdf.p7m`, and `.p7m` files are accepted (Windows shortcuts and other types are excluded).
-- **Image area tolerance slider:** Choose the maximum percentage of document area that can be made up of images (default: 80%). If a document contains more images than the set threshold, it is considered not accessible. This allows for more granular control over what is considered accessible, even for mixed-content PDFs.
-- **Client-side analysis:** All processing happens in your browser; no files are uploaded or stored elsewhere.
-- **Accessibility check:** The tool analyzes each PDF to verify if it contains selectable and readable text (not just images or corrupted content).
-- **Visual previews:** See a thumbnail of the first page for each PDF, or a placeholder if no preview is available.
-- **Clear results table:** Each document is marked as accessible (green lamp), not accessible (red lamp), or signed/not supported (yellow lamp), along with its file name and preview.
-- **Paginated results:** If more than 20 files are uploaded, results are split across pages, with navigation controls.
-- **Progress bar and smooth UI:** Animated progress indicators for file loading and analysis, with a modern, responsive interface.
-- **Legend:** A clear legend explains the meaning of the green, red, and yellow icons.
+- **Batch upload support**
+  - Upload multiple PDF files at once
+  - Supports `.pdf`, `.p7m`, `.pdf.p7m`
+
+- **Detailed Accessibility Analysis**
+  - Detects if text is selectable and readable
+  - Identifies image-heavy (scanned) documents
+  - Evaluates text quality and structure
+
+- **Accessibility Issue Detection (NEW)**
+  Each document includes a breakdown of issues such as:
+  - No readable text (image-only PDFs)
+  - High image content percentage
+  - Very low text density
+  - Possible OCR issues (text present but insufficient)
+
+- **Visual Indicators**
+  - 🟢 Accessible
+  - 🔴 Not Accessible
+  - 🟡 Signed PDF (unsupported extraction)
+
+<img width="800" height="505" alt="image" src="https://github.com/user-attachments/assets/edf95a73-a8dd-4afa-90a3-001ed86c8410" />
+
+
+- **Preview Support**
+  - First-page thumbnail for quick identification
+
+- **Tolerance Slider**
+  - Adjustable threshold for image-heavy documents (default: 80%)
+
+- **Client-Side Processing**
+  - No uploads to server
+  - Fully secure and local processing
+
+- **Paginated Results**
+  - Handles large batches efficiently
 
 ---
 
-## ❓ What is "PDF Accessibility"?
+## ❓ What is "Accessibility" in this Tool?
 
 A PDF is considered **accessible** if:
-- The document contains at least one page with selectable, readable text (not just scanned images).
-- The extracted text is readable (not corrupted or made up of random/garbled characters).
-- The percentage of image area in the document is **less than** the tolerance threshold set by the user (default: 80%).
-
-A PDF is **not accessible** if:
-- It only contains scanned images (no selectable text).
-- Its text is damaged or unreadable when copied/pasted.
-- It is encrypted, protected, or fails to load.
-- The percentage of the document composed of images is **equal to or greater than** the selected tolerance.
+- It contains meaningful, selectable text
+- Text is readable (not corrupted or garbled)
+- Image content is below the configured threshold
+- At least one page contains valid text content
 
 ---
 
-## 📜 How are **signed PDFs** handled?
+## ⚠️ Accessibility Issues Detected
 
-The tool supports checking **digitally signed PDFs** (typically `.p7m` and `.pdf.p7m` files):
+Instead of just saying *Accessible / Not Accessible*, this tool explains **why**:
 
-- When a signed PDF is uploaded (`.p7m` or `.pdf.p7m`), the tool tries to extract the embedded PDF using the [ASN1.js library by Lapo Luchini](https://lapo.it/asn1js/).
-- If extraction is **successful**, the extracted PDF is analyzed like any regular PDF (for text accessibility, images, etc.).
-- If extraction **fails** (for example, if the file does not contain an embeddable PDF, or the signature format is unsupported), the document is marked with a **yellow lamp** and the label "Signed PDF (.p7m) not supported".
-- Native signed PDFs (PDF format with digital signatures, opened directly with PDF.js) are analyzed as normal PDFs — the signature is ignored for accessibility purposes.
-
-**Legend:**
-- **Green lamp:** Accessible document
-- **Red lamp:** Not accessible document
-- **Yellow lamp:** Signed PDF (.p7m) not supported for accessibility analysis
+| Issue | Meaning |
+|------|--------|
+| No readable text | Document is likely scanned |
+| High image content | Too much of document is image-based |
+| Very low text content | Insufficient readable content |
+| Possible OCR issue | Text exists but quality is poor |
 
 ---
 
-## 💡 How To Use
+## 📜 Signed PDF Handling
 
-1. **Open the application** in your browser (just open `index.html`).
-2. Click the **"Upload documents"** button.
-3. Optionally, adjust the **image area tolerance** slider to your desired value (default 80%). This sets the threshold for how much of a PDF can be image content before it is marked as "not accessible".
-4. Select one or more PDF files from your computer (only real PDF files and signed PDFs are accepted; Windows shortcuts are skipped).
-5. Wait for the progress bar and analysis to finish.
-6. View results in the table:
-   - Each row shows a preview, file name, and accessibility status (green/red/yellow lamp).
-   - If you uploaded more than 20 PDFs, use the navigation buttons below the table.
-7. Check the legend for icon meanings.
-8. Click **"Upload more files"** to start a new session.
+- `.p7m` / `.pdf.p7m` files are supported
+- Attempts extraction using ASN.1 decoding
+- If extraction fails:
+  - Marked as 🟡 *Unsupported signed document*
 
 ---
 
-## 🛠️ How the Tolerance Slider Works
+## 💡 How to Use
 
-The **image area tolerance slider** allows you to define the maximum percentage of each PDF that can be composed of images for it to be considered accessible.
-- **Default value:** 80% (indicated on the slider).
-- If a PDF has images that cover more than the selected percentage, it is **not accessible**.
-- This is useful for mixed-content PDFs where a small amount of selectable text does not make the document truly accessible.
+1. Open `index.html`
+2. Click **Upload Documents**
+3. Adjust tolerance if needed
+4. Select files
+5. Review results:
+
+| Column | Description |
+|-------|------------|
+| Preview | First page |
+| File Name | Uploaded file |
+| Accessibility | Status (lamp indicator) |
+| Issues Found | Detailed explanation |
+
+---
+
+## 🛠️ How It Works (Technical)
+
+The tool analyzes each PDF by:
+- Extracting text using **PDF.js**
+- Measuring:
+  - Text density
+  - Image vs text ratio
+  - Character quality
+- Applying rule-based validation:
+  - Text presence thresholds
+  - Content quality heuristics
 
 ---
 
 ## 🔒 Privacy & Security
 
-- **All processing is done locally** in your browser.
-- **No file is sent to any server**.
-- **No data is stored** except for temporary in-memory use during the browser session.
+- 100% client-side processing
+- No uploads or storage
+- Suitable for sensitive documents (e.g., student records, immigration forms)
 
 ---
 
-## 🏆 What makes it special?
+## ✨ Use Cases
 
-- **No backend or server needed:** Everything runs in your browser. Perfect for privacy-conscious workflows or environments where installation of new software is not possible.
-- **No dependencies beyond your browser:** Works on Windows, Mac, Linux, ChromeOS — anywhere with a modern browser.
-
----
-
-## ✨ Limitations
-
-- Does not check for full WCAG/PDF-UA accessibility, only for selectable/readable text and image content percentage.
-- Password-protected, encrypted, or DRM PDFs are marked as "not accessible".
-- Analysis speed depends on your browser and computer.
-- Extraction of PDF from `.p7m`/signed files depends on signature format; not all signed PDFs can be successfully analyzed.
+- Sunapsis EForm validation
+- OSU accessibility compliance checks
+- Document intake quality control
+- Batch auditing of PDFs before publishing
 
 ---
 
-## 📦 Libraries & Licenses
+## ⚠️ Limitations
 
-- **PDF.js** by Mozilla ([Apache License 2.0](https://github.com/mozilla/pdf.js/blob/master/LICENSE))
-- **ASN1.js** by [Lapo Luchini](https://lapo.it/asn1js/) (public domain / MIT, see [source](https://lapo.it/asn1js/))
-- **Other icons/SVGs:** custom or public domain
-
-**This project itself is released under the [MIT License](LICENSE).**
-
----
-
-## 🙏 Credits & Inspiration
-
-- [PDF.js](https://github.com/mozilla/pdf.js)
-- [ASN1.js](https://lapo.it/asn1js/)
-- [jsrsasign](https://github.com/kjur/jsrsasign) (can be used for advanced signature processing)
+- Does not fully validate WCAG / PDF-UA standards
+- Does not check:
+  - Tags / structure tree
+  - Heading hierarchy
+  - Alt text for images
+- OCR quality detection is heuristic-based
 
 ---
 
-## 📣 Feedback & Contributions
+## 📦 Libraries
 
-Feel free to open issues, ask questions, or contribute improvements!
+- **PDF.js** (Mozilla)
+- **ASN1.js** (Lapo Luchini)
 
-<a href="https://github.com/R0mb0/Crafted_with_AI">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/R0mb0/Crafted_with_AI/blob/main/Badge/SVG/CraftedWithAIDark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="https://github.com/R0mb0/Crafted_with_AI/blob/main/Badge/SVG/NotMadeByAILight.svg">
-    <img alt="Not made by AI" src="https://github.com/R0mb0/Crafted_with_AI/blob/main/Badge/SVG/NotMadeByAIDefault.svg">
-  </picture>
-</a>
+---
+
+## 📣 Future Enhancements (Planned)
+
+- Tag structure validation (PDF/UA)
+- Heading detection
+- Alt-text detection
+- Accessibility scoring system
+- Exportable audit reports
+
+---
+
+## 👨‍💻 Author / Customization
+
+Customized version developed for:
+- Accessibility auditing workflows
+- Institutional document compliance
+- Sunapsis EForm validation
+
+---
+
+## 📣 Feedback
+
+Enhancements and feedback are welcome.
