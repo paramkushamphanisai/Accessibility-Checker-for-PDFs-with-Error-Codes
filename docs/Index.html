@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PDF Accessibility Checker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
+    <script src="asn1.js"></script>
+</head>
+<body>
+    <div id="main-content">
+        <div class="centered">
+            <button id="uploadBtn" class="rounded-btn">Upload documents</button>
+            <input type="file" id="fileInput" accept=".pdf,.pdf.p7m,.p7m" multiple style="display:none;">
+            <!-- TOLERANCE SLIDER -->
+            <div id="toleranceSection" class="tolerance-section">
+                <label for="toleranceSlider" class="tolerance-label">
+                    Image area tolerance:
+                    <span id="toleranceValue">80%</span>
+                </label>
+                <input type="range" id="toleranceSlider" min="0" max="100" step="10" value="80">
+                <div class="tolerance-desc">
+                    Set the maximum percentage of document area made up of images (default: 80%) for a PDF to be considered accessible.<br>
+                    If the document contains images for more than the <b>selected value</b>, it will be considered <b>not accessible</b>.<br>
+                    (For example: with 80% tolerance, if 80% or more of the PDF consists of images, the document is NOT accessible.)
+                </div>
+            </div>
+        </div>
+        <div id="progressContainer" class="progress-section" style="display:none;">
+            <div id="progressTitle"></div>
+            <div class="progress-bar-bg">
+                <div id="progressBar" class="progress-bar-fill"></div>
+            </div>
+        </div>
+        <div id="resultsSection" style="display:none;">
+            <button id="uploadAgainBtn" class="rounded-btn">Upload more files</button>
+            <div id="resultsTableContainer"></div>
+            <div id="legend" class="legend">
+                <span><img src="lamp_green.svg" alt="Green lamp" class="lamp-icon"> Accessible document</span>
+                <span><img src="lamp_red.svg" alt="Red lamp" class="lamp-icon"> Not accessible document</span>
+                <span><img src="lamp_yellow.svg" alt="Yellow lamp" class="lamp-icon"> Signed PDF (.p7m) not supported</span>
+            </div>
+        </div>
+    </div>
+    <!-- PDF.js -->
+    <script src="pdf.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
